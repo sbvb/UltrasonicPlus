@@ -38,7 +38,7 @@
 #include <Ultrasonic.h>
 
 
-Ultrasonic::Ultrasonic(int tp, int ep)
+Ultrasonic::Ultrasonic(int tp, int ep) // This class define the pins and the constants to convert the units
     {
     pinMode(tp, OUTPUT);
     pinMode(ep, INPUT);
@@ -55,7 +55,7 @@ long Ultrasonic::timing()
     digitalWrite(_trigPin, HIGH);
     delayMicroseconds(10);
     digitalWrite(_trigPin, LOW);
-    return pulseIn(_echoPin, HIGH, 4500);
+    return pulseIn(_echoPin, HIGH, 4350); // Standard function on Arduino (pulseIn(pin, value, timeout), where timeout is the time used to stop the reading. The chosen value is equivalent to the time that a sound takes to go through 150 cm  )
     }
 
 float Ultrasonic::convert(long microsec, int metric)
