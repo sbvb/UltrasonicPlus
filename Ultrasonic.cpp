@@ -198,7 +198,7 @@ public:
     double filter(double alpha, Ultrasonic::timing() ); // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off 
     double after_filter_cm(Ultrasonic::convert(With_Filter : filter, true));  
     double after_filter_in(Ultrasonic::convert(With_Filter : filter, false));
-    bool digital_result(With_Filter : filter); // if the enemy is not in the range, return false
+    bool digital_result(With_Filter :: filter); // if the enemy is not in the range, return false
 }
 
 
