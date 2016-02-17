@@ -38,17 +38,6 @@
 #include <Ultrasonic.h>
 
 
-class With_Filter : public Ultrasonic:: Ultrasonic {        
-public:
-    float filter(double alpha, Ultrasonic::timing() ); // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off 
-    float after_filter_cm(Ultrasonic::convert(With_Filter : filter, true));
-    float after_filter_in(Ultrasonic::convert(With_Filter : filter, false));
-    bool digital_result (With_Filter : filter);
-    
-    
-}
-
-
 Ultrasonic::Ultrasonic(int tp, int ep) // This class define the pins and the constants to convert the units
     {
     pinMode(tp, OUTPUT);
@@ -204,3 +193,17 @@ void Ultrasonic::_freeBuffers()
         }
     }
 #endif // COMPILE_STD_DEV
+class With_Filter : public Ultrasonic:: Ultrasonic {        
+public:
+    float filter(double alpha, Ultrasonic::timing() ); // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off 
+    float after_filter_cm(Ultrasonic::convert(With_Filter : filter, true)); // 
+    float after_filter_in(Ultrasonic::convert(With_Filter : filter, false));
+    bool digital_result(With_Filter : filter);
+}
+
+
+With_Filter::filter(double alpha, Ultrasonic::timing()){
+    // Y[n] = a * X[n] + (1-a) * Y[N-1]
+    
+}
+        
