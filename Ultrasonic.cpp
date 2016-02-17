@@ -35,7 +35,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <Ultrasonic.h>
+#include <UltrasonicPlus/../Ultrasonic.h>
 
 
 Ultrasonic::Ultrasonic(int tp, int ep) // This class define the pins and the constants to convert the units
