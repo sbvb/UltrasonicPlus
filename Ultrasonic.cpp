@@ -193,11 +193,11 @@ void Ultrasonic::_freeBuffers()
         }
     }
 #endif // COMPILE_STD_DEV
-class With_Filter : public Ultrasonic:: Ultrasonic {        
+class With_Filter : public Ultrasonic:: Ultrasonic, Ultrasonic::convert ,Ultrasonic::timing  {        
 public:
     double filter(double alpha, Ultrasonic::timing() ); // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off 
-    double after_filter_cm(Ultrasonic::convert(With_Filter : filter, true));  
-    double after_filter_in(Ultrasonic::convert(With_Filter : filter, false));
+    double after_filter_cm(Ultrasonic::convert(With_Filter ::filter(), true));  
+    double after_filter_in(Ultrasonic::convert(With_Filter ::filter(), false));
     bool digital_result(With_Filter :: filter); // if the enemy is not in the range, return false
 }
 
@@ -221,7 +221,7 @@ With_Filter::filter(double alpha, Ultrasonic::timing()){
         
 }
 
-  With_Filter :: digital_result(With_Filter : filter){
-      if (With_Filter: filter >= 4350) return false;
+  With_Filter :: digital_result(With_Filter::filter(double alpha, Ultrasonic::timing())){
+      if (With_Filter::filter()  >= 4350) return false;
       else return true 
   }      
