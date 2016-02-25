@@ -25,7 +25,7 @@
 #if defined(ARDUINO) && ARDUINO >= 100
   #include <Arduino.h>
 #else
-  #include <WProgram.h>
+ // #include <WProgram.h>
 #endif
 
 // Undefine COMPILE_STD_DEV if you don't want Standard Deviation.
@@ -45,7 +45,12 @@ class Ultrasonic
     public:
     Ultrasonic(int tp, int ep);
     long timing();
-    float convert(long microsec, int metric);
+    float convert(long microsec, int metric);/*{
+    // microsec / 29 / 2;
+    if(metric) return microsec / _cmDivisor / 2.0;  // CM
+    // microsec / 74 / 2;
+    else return microsec / _inDivisor / 2.0;  // IN
+    }*/
     void setDivisor(float value, int metric);
     static const int IN = 0;
     static const int CM = 1;

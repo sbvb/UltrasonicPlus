@@ -35,20 +35,21 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <UltrasonicPlus/../Ultrasonic.h>
+#include <math.h>
+#include "Ultrasonic.h"
 
 
 Ultrasonic::Ultrasonic(int tp, int ep) // This class define the pins and the constants to convert the units
     {
-    pinMode(tp, OUTPUT);
-    pinMode(ep, INPUT);
+//    pinMode(tp, OUTPUT);
+  //  pinMode(ep, INPUT);
     _trigPin = tp;
     _echoPin = ep;
     _cmDivisor = 27.6233;
     _inDivisor = 70.1633;
     }
 
-long Ultrasonic::timing()
+/*long Ultrasonic::timing()
     {
     digitalWrite(_trigPin, LOW);
     delayMicroseconds(2);
@@ -57,8 +58,8 @@ long Ultrasonic::timing()
     digitalWrite(_trigPin, LOW);
     return pulseIn(_echoPin, HIGH, 4350); // Standard function on Arduino (pulseIn(pin, value, timeout), where timeout is the time used to stop the reading. The chosen value is equivalent to the time that a sound takes to go through 150 cm  )
     }
-
-float Ultrasonic::convert(long microsec, bool metric)
+*/
+float Ultrasonic::convert(long microsec, int metric)
     {
     // microsec / 29 / 2;
     if(metric) return microsec / _cmDivisor / 2.0;  // CM
@@ -193,7 +194,7 @@ void Ultrasonic::_freeBuffers()
         }
     }
 #endif // COMPILE_STD_DEV
-class With_Filter : public Ultrasonic:: Ultrasonic, Ultrasonic::convert ,Ultrasonic::timing  {        
+class With_Filter : public Ultrasonic {        
 public:
     double filter(double alpha, Ultrasonic::timing() ); // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off 
     double after_filter_cm(Ultrasonic::convert(With_Filter ::filter(), true));  

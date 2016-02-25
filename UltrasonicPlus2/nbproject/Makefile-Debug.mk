@@ -35,6 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/Ultrasonic.o \
 	${OBJECTDIR}/main.o
 
 
@@ -56,16 +57,21 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ultrasonicplus.exe
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ultrasonicplus2.exe
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ultrasonicplus.exe: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ultrasonicplus2.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ultrasonicplus ${OBJECTFILES} ${LDLIBSOPTIONS}
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ultrasonicplus2 ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/Ultrasonic.o: Ultrasonic.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I\"C\:\Users\Ana\ Clara\Documents\GitHub\UltrasonicPlus\" -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Ultrasonic.o Ultrasonic.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -include /C/Users/Ana -include Clara\Documents\GitHub\UltrasonicPlus -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -g -I\"C\:\Users\Ana\ Clara\Documents\GitHub\UltrasonicPlus\" -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
 
 # Subprojects
 .build-subprojects:
@@ -73,7 +79,7 @@ ${OBJECTDIR}/main.o: main.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ultrasonicplus.exe
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ultrasonicplus2.exe
 
 # Subprojects
 .clean-subprojects:
