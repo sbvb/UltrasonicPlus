@@ -216,19 +216,21 @@ public:
             return result_function;
         } 
         else {
-            y = (alpha*(*timing)) + ((1- alpha)*previous_reading);
+            y = (alpha*(*timing)) + ((1- alpha)* previous_reading);
             previous_reading = result_function;
             return result_function;
         }
     }    
         
 }; // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off 
-    double after_filter_cm(float(*convert(double(*filter))), const int 1){
+    double after_filter_cm(float(*convert)){
+        double converter;
+        converter = ((*convert)(double(*filter), const int 1));
     };  
     double after_filter_in(float(*convert)(double(*filter),const int 0 )){
     }; 
     bool digital_result(double(*filter)){
-      if (*filter)  >= 4350) return false;
+      if ((*filter)  >= 4350) return false;
       else return true // if the enemy is not in the range, return false
     };
 }
