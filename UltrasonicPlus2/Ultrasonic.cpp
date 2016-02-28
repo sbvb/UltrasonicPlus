@@ -55,7 +55,7 @@ long Ultrasonic::timing(){
     digitalWrite(_trigPin, HIGH);
     delayMicroseconds(10);
     digitalWrite(_trigPin, LOW);
-    double a= pulseIn(_echoPin, HIGH, 4350); // Standard function on Arduino (pulseIn(pin, value, timeout), where timeout is the time used to stop the reading. The chosen value is equivalent to the time that a sound takes to go through 150 cm  )
+    double a = pulseIn(_echoPin, HIGH, 4350); // Standard function on Arduino (pulseIn(pin, value, timeout), where timeout is the time used to stop the reading. The chosen value is equivalent to the time that a sound takes to go through 150 cm  )
     return a; 
 
 }
@@ -202,32 +202,33 @@ void Ultrasonic::_freeBuffers()
 
 class With_Filter : public Ultrasonic {        
 public:
-    With_Filter(int tp, int ep): Ultrasonic(tp, ep);
-    double filter(double alpha, timing ){
+    With_Filter(int tp, int ep): Ultrasonic(tp, ep){
+    };
+    double filter(double alpha,double(*timing)){
         // Y[n] = a * X[n] + (1-a) * Y[N-1]
-    long previous_reading;
+    long previous_reading =(*timing);
     double result_function;
     long y;
     for (int i=0;i>=0;i++) {
         if (i=0){
-            y= Ultrasonic::timing();
+            y= (*timing);
             previous_reading = result_function;
             return result_function;
         } 
         else {
-            y = (alpha*Ultrasonic::timing()) + ((1- alpha)*previous_reading);
+            y = (alpha*(*timing)) + ((1- alpha)*previous_reading);
             previous_reading = result_function;
             return result_function;
         }
     }    
         
-};
-        
-    } // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off 
-    double after_filter_cm(Ultrasonic::convert(filter.With_filter, 1));  
-    double after_filter_in(Ultrasonic::convert(&result_function, 0));
-    bool digital_result(result_function){
-      if (With_Filter:filter()  >= 4350) return false;
+}; // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off 
+    double after_filter_cm(float(*convert(double(*filter))), const int 1){
+    };  
+    double after_filter_in(float(*convert)(double(*filter),const int 0 )){
+    }; 
+    bool digital_result(double(*filter)){
+      if (*filter)  >= 4350) return false;
       else return true // if the enemy is not in the range, return false
     };
 }
