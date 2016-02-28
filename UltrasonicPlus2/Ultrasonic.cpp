@@ -202,10 +202,11 @@ void Ultrasonic::_freeBuffers()
 
 class With_Filter : public Ultrasonic {        
 public:
-    double filter(double alpha, a ){
+    With_Filter(int tp, int ep): Ultrasonic(tp, ep);
+    double filter(double alpha, timing ){
         // Y[n] = a * X[n] + (1-a) * Y[N-1]
     long previous_reading;
-    long result_function;
+    double result_function;
     long y;
     for (int i=0;i>=0;i++) {
         if (i=0){
@@ -223,11 +224,12 @@ public:
 };
         
     } // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off 
-    double after_filter_cm(Ultrasonic::convert(result_function, 1));  
-    double after_filter_in(Ultrasonic::convert(result_function, 0));
+    double after_filter_cm(Ultrasonic::convert(filter.With_filter, 1));  
+    double after_filter_in(Ultrasonic::convert(&result_function, 0));
     bool digital_result(result_function){
       if (With_Filter:filter()  >= 4350) return false;
       else return true // if the enemy is not in the range, return false
+    };
 }
 
 /*
