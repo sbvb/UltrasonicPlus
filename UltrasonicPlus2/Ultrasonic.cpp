@@ -41,28 +41,32 @@
 
 Ultrasonic::Ultrasonic(int tp, int ep) // This class define the pins and the constants to convert the units
     {
-//    pinMode(tp, OUTPUT);
-  //  pinMode(ep, INPUT);
+    pinMode(tp, OUTPUT);
+    pinMode(ep, INPUT);
     _trigPin = tp;
     _echoPin = ep;
     _cmDivisor = 27.6233;
     _inDivisor = 70.1633;
     }
 
-/*long Ultrasonic::timing()
-    {
+long Ultrasonic::timing(){
     digitalWrite(_trigPin, LOW);
     delayMicroseconds(2);
     digitalWrite(_trigPin, HIGH);
     delayMicroseconds(10);
     digitalWrite(_trigPin, LOW);
-    return pulseIn(_echoPin, HIGH, 4350); // Standard function on Arduino (pulseIn(pin, value, timeout), where timeout is the time used to stop the reading. The chosen value is equivalent to the time that a sound takes to go through 150 cm  )
-    }
-*/
-float Ultrasonic::convert(long microsec, int metric)
-    {
+    double a= pulseIn(_echoPin, HIGH, 4350); // Standard function on Arduino (pulseIn(pin, value, timeout), where timeout is the time used to stop the reading. The chosen value is equivalent to the time that a sound takes to go through 150 cm  )
+    return a; 
+
+}
+
+float Ultrasonic::convert(long microsec, int metric){
     // microsec / 29 / 2;
-    if(metric) return microsec / _cmDivisor / 2.0;  // CM
+    if(metric){
+        double cm;
+    cm =  microsec / _cmDivisor / 2.0;  // CM
+        return cm;
+    }
     // microsec / 74 / 2;
     else return microsec / _inDivisor / 2.0;  // IN
     }
@@ -194,16 +198,40 @@ void Ultrasonic::_freeBuffers()
         }
     }
 #endif // COMPILE_STD_DEV
+
+
 class With_Filter : public Ultrasonic {        
 public:
-    double filter(double alpha, Ultrasonic::timing() ); // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off 
-    double after_filter_cm(Ultrasonic::convert(With_Filter ::filter(), true));  
-    double after_filter_in(Ultrasonic::convert(With_Filter ::filter(), false));
-    bool digital_result(With_Filter :: filter); // if the enemy is not in the range, return false
+    double filter(double alpha, a ){
+        // Y[n] = a * X[n] + (1-a) * Y[N-1]
+    long previous_reading;
+    long result_function;
+    long y;
+    for (int i=0;i>=0;i++) {
+        if (i=0){
+            y= Ultrasonic::timing();
+            previous_reading = result_function;
+            return result_function;
+        } 
+        else {
+            y = (alpha*Ultrasonic::timing()) + ((1- alpha)*previous_reading);
+            previous_reading = result_function;
+            return result_function;
+        }
+    }    
+        
+};
+        
+    } // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off 
+    double after_filter_cm(Ultrasonic::convert(result_function, 1));  
+    double after_filter_in(Ultrasonic::convert(result_function, 0));
+    bool digital_result(result_function){
+      if (With_Filter:filter()  >= 4350) return false;
+      else return true // if the enemy is not in the range, return false
 }
 
-
-With_Filter::filter(double alpha, Ultrasonic::timing()){
+/*
+With_Filter :filter(double alpha, Ultrasonic::timing()){
     // Y[n] = a * X[n] + (1-a) * Y[N-1]
     long previous_reading;
     long result_function;
@@ -221,8 +249,11 @@ With_Filter::filter(double alpha, Ultrasonic::timing()){
     }    
         
 }
+ 
 
-  With_Filter :: digital_result(With_Filter::filter(double alpha, Ultrasonic::timing())){
-      if (With_Filter::filter()  >= 4350) return false;
+  With_Filter : digital_result(With_Filter:filter(double alpha, Ultrasonic:timing())){
+      if (With_Filter:filter()  >= 4350) return false;
       else return true 
-  }      
+  }
+ * 
+ * */      
