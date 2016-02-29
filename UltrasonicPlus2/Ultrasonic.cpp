@@ -202,6 +202,8 @@ void Ultrasonic::_freeBuffers()
 
 class With_Filter : public Ultrasonic {        
 public:
+    double cmDivisor = 27.6233;
+    double inDivisor = 70.1633;
     With_Filter(int tp, int ep): Ultrasonic(tp, ep){
     };
     double filter(double alpha,double(*timing)){
@@ -221,19 +223,27 @@ public:
             return result_function;
         }
     }    
+    }
         
-}; // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off 
-    double after_filter_cm(float(*convert)){
-        double converter;
-        converter = ((*convert)(double(*filter), const int 1));
+ // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off 
+    double after_filter_cm(double(*filter))  {
+        double cm ;
+        cm =  (*filter) / cmDivisor ;
+        return cm;
+        
     };  
-    double after_filter_in(float(*convert)(double(*filter),const int 0 )){
+    double after_filter_in(double(*filter))  {
+        double in ;
+        in = (*filter) / inDivisor ;
+        return in;
     }; 
-    bool digital_result(double(*filter)){
+    
+  
+    bool digital_result(double(*filter))  {
       if ((*filter)  >= 4350) return false;
-      else return true // if the enemy is not in the range, return false
-    };
-}
+      else return true; // if the enemy is not in the range, return false
+      };
+};
 
 /*
 With_Filter :filter(double alpha, Ultrasonic::timing()){
@@ -255,10 +265,9 @@ With_Filter :filter(double alpha, Ultrasonic::timing()){
         
 }
  
-
+ * 
   With_Filter : digital_result(With_Filter:filter(double alpha, Ultrasonic:timing())){
       if (With_Filter:filter()  >= 4350) return false;
       else return true 
   }
- * 
- * */      
+ */     
