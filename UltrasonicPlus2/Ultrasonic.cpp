@@ -37,169 +37,152 @@
 #include <string.h>
 #include <math.h>
 #include "Ultrasonic.h"
-
+#include"With_Filter.h"
 
 Ultrasonic::Ultrasonic(int tp, int ep) // This class define the pins and the constants to convert the units
-    {
+{
     pinMode(tp, OUTPUT);
     pinMode(ep, INPUT);
     _trigPin = tp;
     _echoPin = ep;
     _cmDivisor = 27.6233;
     _inDivisor = 70.1633;
-    }
+}
 
-long Ultrasonic::timing(){
+long Ultrasonic::timing() {
     digitalWrite(_trigPin, LOW);
     delayMicroseconds(2);
     digitalWrite(_trigPin, HIGH);
     delayMicroseconds(10);
     digitalWrite(_trigPin, LOW);
     double a = pulseIn(_echoPin, HIGH, 4350); // Standard function on Arduino (pulseIn(pin, value, timeout), where timeout is the time used to stop the reading. The chosen value is equivalent to the time that a sound takes to go through 150 cm  )
-    return a; 
+    return a;
 
 }
 
-float Ultrasonic::convert(long microsec, int metric){
+float Ultrasonic::convert(long microsec, int metric) {
     // microsec / 29 / 2;
-    if(metric){
+    if (metric) {
         double cm;
-    cm =  microsec / _cmDivisor / 2.0;  // CM
+        cm = microsec / _cmDivisor / 2.0; // CM
         return cm;
-    }
-    // microsec / 74 / 2;
-    else return microsec / _inDivisor / 2.0;  // IN
-    }
+    }// microsec / 74 / 2;
+    else return microsec / _inDivisor / 2.0; // IN
+}
 
-void Ultrasonic::setDivisor(float value, int metric)
-    {
-    if(metric) _cmDivisor = value;
+void Ultrasonic::setDivisor(float value, int metric) {
+    if (metric) _cmDivisor = value;
     else _inDivisor = value;
-    }
+}
 
 #ifdef COMPILE_STD_DEV
-bool Ultrasonic::sampleCreate(size_t numBufs, ...)
-    {
+
+bool Ultrasonic::sampleCreate(size_t numBufs, ...) {
     bool result = false;
     va_list ap;
     _numBufs = numBufs;
 
-    if((_pBuffers = (BufCtl *) calloc(numBufs, sizeof(BufCtl))) != NULL)
-        {
+    if ((_pBuffers = (BufCtl *) calloc(numBufs, sizeof (BufCtl))) != NULL) {
         va_start(ap, numBufs);
         BufCtl *buf;
         size_t smpSize;
 
-        for(size_t i = 0; i < _numBufs; i++)
-            {
+        for (size_t i = 0; i < _numBufs; i++) {
             buf = &_pBuffers[i];
             smpSize = va_arg(ap, size_t);
 
-            if((buf->pBegin = (float *) calloc(smpSize, sizeof(float))) != NULL)
-                {
+            if ((buf->pBegin = (float *) calloc(smpSize, sizeof (float))) != NULL) {
                 buf->pIndex = buf->pBegin;
                 buf->length = smpSize;
                 buf->filled = false;
                 result = true;
-                }
-            else
-                {
+            } else {
                 result = false;
                 break;
-                }
             }
+        }
 
         va_end(ap);
-        }
-
-    if(!result) _freeBuffers();
-    return result;
     }
 
-void Ultrasonic::sampleClear()
-    {
-    if(_pBuffers)
-        {
+    if (!result) _freeBuffers();
+    return result;
+}
+
+void Ultrasonic::sampleClear() {
+    if (_pBuffers) {
         BufCtl *buf;
 
-        for(size_t i = 0; i < _numBufs; i++)
-            {
+        for (size_t i = 0; i < _numBufs; i++) {
             buf = &_pBuffers[i];
-            memset(buf, '\0', sizeof(float) * buf->length);
+            memset(buf, '\0', sizeof (float) * buf->length);
             buf->pIndex = buf->pBegin;
             buf->filled = false;
-            }
         }
     }
+}
 
-float Ultrasonic::unbiasedStdDev(float value, size_t bufNum)
-    {
+float Ultrasonic::unbiasedStdDev(float value, size_t bufNum) {
     float result = 0.0;
 
-    if(_pBuffers)
-        {
+    if (_pBuffers) {
         BufCtl *buf = &_pBuffers[bufNum];
 
-        if(buf->length > 1)
-            {
+        if (buf->length > 1) {
             _sampleUpdate(buf, float(value));
 
-            if(buf->filled)
-                {
+            if (buf->filled) {
                 float sum = 0.0, mean, tmp;
 
-                for(size_t i = 0; i < buf->length; i++)
+                for (size_t i = 0; i < buf->length; i++)
                     sum += buf->pBegin[i];
 
                 mean = sum / buf->length;
                 sum = 0.0;
 
-                for(size_t i = 0; i < buf->length; i++)
-                    {
+                for (size_t i = 0; i < buf->length; i++) {
                     tmp = buf->pBegin[i] - mean;
                     sum += (tmp * tmp);
-                    }
+                }
 
                 result = sqrt(sum / (buf->length - 1));
                 //Serial.print(bufNum);
                 //Serial.print(" : ");
                 //Serial.println(result);
-                }
             }
         }
+    }
 
     return result;
-    }
+}
 
-void Ultrasonic::_sampleUpdate(BufCtl *buf, float msec)
-    {
-    if(buf->pIndex >= (buf->pBegin + buf->length))
-        {
+void Ultrasonic::_sampleUpdate(BufCtl *buf, float msec) {
+    if (buf->pIndex >= (buf->pBegin + buf->length)) {
         buf->pIndex = buf->pBegin;
         buf->filled = true;
-        }
+    }
 
     *(buf->pIndex++) = msec;
-    }
+}
 
-void Ultrasonic::_freeBuffers()
-    {
-    if(_pBuffers)
-        {
+void Ultrasonic::_freeBuffers() {
+    if (_pBuffers) {
         BufCtl *buf;
 
-        for(size_t i = 0; i < _numBufs; i++)
-            {
+        for (size_t i = 0; i < _numBufs; i++) {
             buf = &_pBuffers[i];
             free(buf->pBegin);
-            }
+        }
 
         free(_pBuffers);
-        }
     }
+}
 #endif // COMPILE_STD_DEV
 
+With_Filter::With_Filter(int tp, int ep) : Ultrasonic(tp, ep) {
+};
 
+<<<<<<< HEAD
 class With_Filter : public Ultrasonic {        
 public:
     double cmDivisor = 27.6233;
@@ -210,19 +193,25 @@ public:
         // filter the result to remove the errors
         // Y[n] = a * X[n] + (1-a) * Y[N-1]
     long previous_reading =(*timing);
+=======
+With_Filter::filter(double alpha, double(*timing)) {
+    // Y[n] = a * X[n] + (1-a) * Y[N-1]
+    alpha = 0.7; // to be tested
+    long previous_reading;
+>>>>>>> 457e1e6e4a3188271732ba4ef115fdce360d5806
     double result_function;
-    long y;
-    for (int i=0;i>=0;i++) {
-        if (i=0){
-            y= (*timing);
+    //long y;
+    for (int i = 0; i >= 0; i++) {
+        if (i = 0) {
+            previous_reading = (*timing);
             previous_reading = result_function;
             return result_function;
-        } 
-        else {
-            y = (alpha*(*timing)) + ((1- alpha)* previous_reading);
+        } else {
+            result_function = (alpha * (*timing)) + ((1 - alpha) * previous_reading);
             previous_reading = result_function;
             return result_function;
         }
+<<<<<<< HEAD
     }    
     }
         
@@ -274,3 +263,26 @@ With_Filter :filter(double alpha, Ultrasonic::timing()){
       else return true 
   }
  */     
+=======
+    }
+};
+
+With_Filter::after_filter_cm((double alpha, double(*timing), double(*filter)(double, double)), int CM, float(*convert)(double, int)) {
+    double converted;
+    double filtrated;
+    // filtrated = double alpha, double(*timing),double(*filter)(double,double);
+    filtrated = (*filter)(alpha, (*timing));
+    converted = (*convert)(filtrated, 1);
+    return converted;
+};
+
+With_Filter::after_filter_in(float(*convert)(double(*filter)(double alpha, long (*timing)), const int 0)) {
+};
+
+With_Filter::digital_result(double(*filter)) {
+    if ((*filter) >= 4350) return false;
+    else return true // if the enemy is not in the range, return false
+    };
+}
+
+>>>>>>> 457e1e6e4a3188271732ba4ef115fdce360d5806
