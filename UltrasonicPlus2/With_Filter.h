@@ -15,18 +15,14 @@
 #define WITH_FILTER_H
 
 class With_Filter : public Ultrasonic {
-    public:
-         With_Filter(int tp, int ep);
-         double filter(double alpha,double(*timing));
-         double after_filter_cm((double alpha, double(*timing),double(*filter)(double,double)), int CM,float(*convert)(double, int));
-         double after_filter_in();
-         bool digital_result(double(*filter));
-         
-         
-         
-         
-         
-                 
+public:
+
+    With_Filter(int tp, int ep) : Ultrasonic(tp, ep) {
+    };
+    double filter(double alpha,double(*timing));
+    // double after_filter_cm((double alpha, double(*timing), double(*filter)(double, double)), int CM, float(*convert)(double, int));
+    // double after_filter_in();
+    bool digital_result(double(*filter));
 };
 
 

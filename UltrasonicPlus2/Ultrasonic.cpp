@@ -179,10 +179,10 @@ void Ultrasonic::_freeBuffers() {
 }
 #endif // COMPILE_STD_DEV
 
-With_Filter::With_Filter(int tp, int ep) : Ultrasonic(tp, ep) {
-};
+//With_Filter::With_Filter(int tp, int ep) : Ultrasonic(tp, ep) {
+//};
 
-With_Filter::filter(double alpha, double(*timing)) {
+With_Filter::filter (double alpha, double(*timing)) {
     // Y[n] = a * X[n] + (1-a) * Y[N-1]
     alpha = 0.7; // to be tested
     long previous_reading;
@@ -193,14 +193,16 @@ With_Filter::filter(double alpha, double(*timing)) {
             previous_reading = (*timing);
             previous_reading = result_function;
             return result_function;
-        } else {
+        }
+        else {
             result_function = (alpha * (*timing)) + ((1 - alpha) * previous_reading);
             previous_reading = result_function;
             return result_function;
         }
     }
-};
+}
 
+/*
 With_Filter::after_filter_cm((double alpha, double(*timing), double(*filter)(double, double)), int CM, float(*convert)(double, int)) {
     double converted;
     double filtrated;
@@ -212,10 +214,12 @@ With_Filter::after_filter_cm((double alpha, double(*timing), double(*filter)(dou
 
 With_Filter::after_filter_in(float(*convert)(double(*filter)(double alpha, long (*timing)), const int 0)) {
 };
+ * */
 
 With_Filter::digital_result(double(*filter)) {
     if ((*filter) >= 4350) return false;
     else return true // if the enemy is not in the range, return false
-    };
-}
+    }
+
+
 
