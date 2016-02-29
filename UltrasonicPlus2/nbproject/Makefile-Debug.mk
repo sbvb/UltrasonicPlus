@@ -36,6 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/Ultrasonic.o \
+	${OBJECTDIR}/Ultrasonic2.o \
 	${OBJECTDIR}/main.o
 
 
@@ -67,6 +68,11 @@ ${OBJECTDIR}/Ultrasonic.o: Ultrasonic.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I\"C\:\Users\Ana\ Clara\Documents\GitHub\UltrasonicPlus\" -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Ultrasonic.o Ultrasonic.cpp
+
+${OBJECTDIR}/Ultrasonic2.o: Ultrasonic2.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I\"C\:\Users\Ana\ Clara\Documents\GitHub\UltrasonicPlus\" -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Ultrasonic2.o Ultrasonic2.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
