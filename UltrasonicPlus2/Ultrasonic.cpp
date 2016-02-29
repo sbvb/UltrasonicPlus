@@ -207,6 +207,7 @@ public:
     With_Filter(int tp, int ep): Ultrasonic(tp, ep){
     };
     double filter(double alpha,double(*timing)){
+        // filter the result to remove the errors
         // Y[n] = a * X[n] + (1-a) * Y[N-1]
     long previous_reading =(*timing);
     double result_function;
@@ -225,21 +226,23 @@ public:
     }    
     }
         
- // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off 
     double after_filter_cm(double(*filter))  {
+        // turn the result after the aplication of the filter into cm
         double cm ;
         cm =  (*filter) / cmDivisor ;
         return cm;
         
     };  
     double after_filter_in(double(*filter))  {
+        // turn the result after filter into inches
         double in ;
         in = (*filter) / inDivisor ;
         return in;
     }; 
     
-  
+   
     bool digital_result(double(*filter))  {
+ // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off          
       if ((*filter)  >= 4350) return false;
       else return true; // if the enemy is not in the range, return false
       };
