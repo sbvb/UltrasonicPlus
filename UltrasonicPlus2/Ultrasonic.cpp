@@ -203,18 +203,18 @@ double With_Filter::filter(double alpha, double(*timing)) {
     }
 }
 
-double With_Filter :: after_filter_cm(double(*filter)) {
+double With_Filter :: after_filter_cm(double alpha,double(*timing),double(*filter)(double, double)) {
     // turn the result after the aplication of the filter into cm
     double cm;
-    cm = (*filter) /cmDivisor;
+    cm = (*filter)(alpha, (*timing)) /cmDivisor;
     return cm;
 
 };
 
-double With_Filter :: after_filter_in(double(*filter)) {
+double With_Filter :: after_filter_in(double alpha,double(*timing),double(*filter)(double, double)) {
     // turn the result after filter into inches
     double in;
-    in = (*filter) /inDivisor;
+    in = (*filter)(alpha,(*timing)) /inDivisor;
     return in;
 };
 
