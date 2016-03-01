@@ -182,10 +182,27 @@ void Ultrasonic::_freeBuffers() {
 //With_Filter::With_Filter(int tp, int ep) : Ultrasonic(tp, ep) {
 //};
 
+<<<<<<< HEAD
 With_Filter::filter (double alpha, double(*timing)) {
+=======
+<<<<<<< HEAD
+class With_Filter : public Ultrasonic {        
+public:
+    double cmDivisor = 27.6233;
+    double inDivisor = 70.1633;
+    With_Filter(int tp, int ep): Ultrasonic(tp, ep){
+    };
+    double filter(double alpha,double(*timing)){
+        // filter the result to remove the errors
+        // Y[n] = a * X[n] + (1-a) * Y[N-1]
+    long previous_reading =(*timing);
+=======
+With_Filter::filter(double alpha, double(*timing)) {
+>>>>>>> origin/master
     // Y[n] = a * X[n] + (1-a) * Y[N-1]
     alpha = 0.7; // to be tested
     long previous_reading;
+>>>>>>> 457e1e6e4a3188271732ba4ef115fdce360d5806
     double result_function;
     //long y;
     for (int i = 0; i >= 0; i++) {
@@ -199,6 +216,59 @@ With_Filter::filter (double alpha, double(*timing)) {
             previous_reading = result_function;
             return result_function;
         }
+<<<<<<< HEAD
+    }    
+    }
+        
+    double after_filter_cm(double(*filter))  {
+        // turn the result after the aplication of the filter into cm
+        double cm ;
+        cm =  (*filter) / cmDivisor ;
+        return cm;
+        
+    };  
+    double after_filter_in(double(*filter))  {
+        // turn the result after filter into inches
+        double in ;
+        in = (*filter) / inDivisor ;
+        return in;
+    }; 
+    
+   
+    bool digital_result(double(*filter))  {
+ // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off          
+      if ((*filter)  >= 4350) return false;
+      else return true; // if the enemy is not in the range, return false
+      };
+};
+
+/*
+With_Filter :filter(double alpha, Ultrasonic::timing()){
+    // Y[n] = a * X[n] + (1-a) * Y[N-1]
+    long previous_reading;
+    long result_function;
+    for (int i=0;i>=0;i++) {
+        if (i=0){
+            y= Ultrasonic::timing();
+            previous_reading = result_function;
+            return result_function;
+        } 
+        else {
+            y= (alpha*Ultrasonic::timing()) + ((1- alpha)*D);
+            previous_reading = result_function;
+            return result_function;
+        }
+    }    
+        
+}
+ 
+ * 
+  With_Filter : digital_result(With_Filter:filter(double alpha, Ultrasonic:timing())){
+      if (With_Filter:filter()  >= 4350) return false;
+      else return true 
+  }
+ */     
+=======
     }
 }
 
@@ -223,3 +293,4 @@ With_Filter::digital_result(double(*filter)) {
 
 
 
+>>>>>>> 457e1e6e4a3188271732ba4ef115fdce360d5806
