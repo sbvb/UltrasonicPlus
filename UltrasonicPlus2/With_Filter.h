@@ -16,12 +16,13 @@
 
 class With_Filter : public Ultrasonic {
 public:
-
+    double cmDivisor = 27.6233;
+    double inDivisor = 70.1633;
     With_Filter(int tp, int ep) : Ultrasonic(tp, ep) {
     };
     double filter(double alpha,double(*timing));
-    // double after_filter_cm((double alpha, double(*timing), double(*filter)(double, double)), int CM, float(*convert)(double, int));
-    // double after_filter_in();
+    double after_filter_cm(double(*filter));
+    double after_filter_in(double (*filter));
     bool digital_result(double(*filter));
 };
 

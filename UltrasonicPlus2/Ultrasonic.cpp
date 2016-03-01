@@ -182,65 +182,48 @@ void Ultrasonic::_freeBuffers() {
 //With_Filter::With_Filter(int tp, int ep) : Ultrasonic(tp, ep) {
 //};
 
-<<<<<<< HEAD
-With_Filter::filter (double alpha, double(*timing)) {
-=======
-<<<<<<< HEAD
-class With_Filter : public Ultrasonic {        
-public:
-    double cmDivisor = 27.6233;
-    double inDivisor = 70.1633;
-    With_Filter(int tp, int ep): Ultrasonic(tp, ep){
-    };
-    double filter(double alpha,double(*timing)){
-        // filter the result to remove the errors
-        // Y[n] = a * X[n] + (1-a) * Y[N-1]
-    long previous_reading =(*timing);
-=======
-With_Filter::filter(double alpha, double(*timing)) {
->>>>>>> origin/master
+double With_Filter::filter(double alpha, double(*timing)) {
+   // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off
     // Y[n] = a * X[n] + (1-a) * Y[N-1]
     alpha = 0.7; // to be tested
-    long previous_reading;
->>>>>>> 457e1e6e4a3188271732ba4ef115fdce360d5806
+    long previous_reading =(*timing);
     double result_function;
-    //long y;
-    for (int i = 0; i >= 0; i++) {
-        if (i = 0) {
-            previous_reading = (*timing);
+    long y;
+    for (int i=0;i>=0;i++) {
+        if (i=0){
+            y= (*timing);
             previous_reading = result_function;
             return result_function;
-        }
+        } 
         else {
-            result_function = (alpha * (*timing)) + ((1 - alpha) * previous_reading);
+            y = (alpha*(*timing)) + ((1- alpha)* previous_reading);
             previous_reading = result_function;
             return result_function;
         }
-<<<<<<< HEAD
-    }    
     }
-        
-    double after_filter_cm(double(*filter))  {
-        // turn the result after the aplication of the filter into cm
-        double cm ;
-        cm =  (*filter) / cmDivisor ;
-        return cm;
-        
-    };  
-    double after_filter_in(double(*filter))  {
-        // turn the result after filter into inches
-        double in ;
-        in = (*filter) / inDivisor ;
-        return in;
-    }; 
-    
-   
-    bool digital_result(double(*filter))  {
- // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off          
-      if ((*filter)  >= 4350) return false;
-      else return true; // if the enemy is not in the range, return false
-      };
+}
+
+double With_Filter :: after_filter_cm(double(*filter)) {
+    // turn the result after the aplication of the filter into cm
+    double cm;
+    cm = (*filter) /cmDivisor;
+    return cm;
+
 };
+
+double With_Filter :: after_filter_in(double(*filter)) {
+    // turn the result after filter into inches
+    double in;
+    in = (*filter) /inDivisor;
+    return in;
+};
+
+bool With_Filter :: digital_result(double(*filter)) {
+           
+    if ((*filter) >= 4350) return false;
+    else return true; // if the enemy is not in the range, return false
+};
+
 
 /*
 With_Filter :filter(double alpha, Ultrasonic::timing()){
@@ -267,11 +250,7 @@ With_Filter :filter(double alpha, Ultrasonic::timing()){
       if (With_Filter:filter()  >= 4350) return false;
       else return true 
   }
- */     
-=======
-    }
-}
-
+ */
 /*
 With_Filter::after_filter_cm((double alpha, double(*timing), double(*filter)(double, double)), int CM, float(*convert)(double, int)) {
     double converted;
@@ -286,11 +265,5 @@ With_Filter::after_filter_in(float(*convert)(double(*filter)(double alpha, long 
 };
  * */
 
-With_Filter::digital_result(double(*filter)) {
-    if ((*filter) >= 4350) return false;
-    else return true // if the enemy is not in the range, return false
-    }
 
 
-
->>>>>>> 457e1e6e4a3188271732ba4ef115fdce360d5806
