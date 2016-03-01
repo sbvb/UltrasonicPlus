@@ -60,8 +60,9 @@ long Ultrasonic::timing() {
 
 }
 
-float Ultrasonic::convert(long microsec, int metric) {
+float Ultrasonic::convert(long (*timing), int metric) {
     // microsec / 29 / 2;
+    long microsec = (*timing);
     if (metric) {
         double cm;
         cm = microsec / _cmDivisor / 2.0; // CM
@@ -185,8 +186,7 @@ void Ultrasonic::_freeBuffers() {
 double With_Filter::filter(double alpha, double(*timing)) {
    // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off
     // Y[n] = a * X[n] + (1-a) * Y[N-1]
-    alpha = 0.7; // to be tested
-    long previous_reading =(*timing);
+    long previous_reading =(*timing)();
     double result_function;
     long y;
     for (int i=0;i>=0;i++) {
@@ -196,7 +196,7 @@ double With_Filter::filter(double alpha, double(*timing)) {
             return result_function;
         } 
         else {
-            y = (alpha*(*timing)) + ((1- alpha)* previous_reading);
+            y = (alpha*(*timing)()) + ((1- alpha)* previous_reading);
             previous_reading = result_function;
             return result_function;
         }
@@ -206,7 +206,7 @@ double With_Filter::filter(double alpha, double(*timing)) {
 double With_Filter :: after_filter_cm(double alpha,double(*timing),double(*filter)(double, double)) {
     // turn the result after the aplication of the filter into cm
     double cm;
-    cm = (*filter)(alpha, (*timing)) /cmDivisor;
+    cm = (*filter)(alpha, (*timing)()) /cmDivisor;
     return cm;
 
 };
@@ -214,13 +214,13 @@ double With_Filter :: after_filter_cm(double alpha,double(*timing),double(*filte
 double With_Filter :: after_filter_in(double alpha,double(*timing),double(*filter)(double, double)) {
     // turn the result after filter into inches
     double in;
-    in = (*filter)(alpha,(*timing)) /inDivisor;
+    in = (*filter)(alpha,(*timing)()) /inDivisor;
     return in;
 };
 
-bool With_Filter :: digital_result(double(*filter)) {
+bool With_Filter :: digital_result(double alpha,double(*timing),double(*filter)(double, double)) {
            
-    if ((*filter) >= 4350) return false;
+    if (((*filter)(alpha,(*timing)())) >= 4350) return false;
     else return true; // if the enemy is not in the range, return false
 };
 

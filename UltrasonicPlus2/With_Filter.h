@@ -23,7 +23,7 @@ public:
     double filter(double alpha,double(*timing));
     double after_filter_cm(double alpha,double(*timing),double(*filter)(double, double));
     double after_filter_in(double alpha,double(*timing),double(*filter)(double, double));
-    bool digital_result(double(*filter));
+    bool digital_result(double alpha,double(*timing),double(*filter)(double, double));
 };
 
 

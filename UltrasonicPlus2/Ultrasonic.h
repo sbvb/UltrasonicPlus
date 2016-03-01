@@ -23,29 +23,26 @@
 #include <stddef.h>
 
 #if defined(ARDUINO) && ARDUINO >= 100
-  #include <Arduino.h>
+    #include <Arduino.h>
 #else
- // #include <WProgram.h>
+    #include <WProgram.h>
 #endif
 
 // Undefine COMPILE_STD_DEV if you don't want Standard Deviation.
 #define COMPILE_STD_DEV
 
-
-typedef struct bufferCtl
-    {
+typedef struct bufferCtl {
     float *pBegin;
     float *pIndex;
     size_t length;
     bool filled;
-    } BufCtl;
+} BufCtl;
 
-class Ultrasonic
-    {
-    public:
+class Ultrasonic {
+public:
     Ultrasonic(int tp, int ep);
     long timing();
-    float convert(long microsec, int metric);/*{
+    float convert(long (*timing), int metric); /*{
     // microsec / 29 / 2;
     if(metric) return microsec / _cmDivisor / 2.0;  // CM
     // microsec / 74 / 2;
@@ -61,7 +58,7 @@ class Ultrasonic
     float unbiasedStdDev(float value, size_t bufNum);
 #endif // COMPILE_STD_DEV
 
-    private:
+private:
     int _trigPin;
     int _echoPin;
     float _cmDivisor;
@@ -73,6 +70,6 @@ class Ultrasonic
     void _sampleUpdate(BufCtl *buf, float msec);
     void _freeBuffers();
 #endif // COMPILE_STD_DEV
-    };
+};
 
 #endif // ULTRASONIC_H
