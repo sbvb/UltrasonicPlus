@@ -182,8 +182,14 @@ void Ultrasonic::_freeBuffers() {
 }
 #endif // COMPILE_STD_DEV
 
-//With_Filter::With_Filter(int tp, int ep) : Ultrasonic(tp, ep) {
-//};
+With_Filter::With_Filter(int tp, int ep) : Ultrasonic(tp, ep){
+    pinMode(tp, OUTPUT);
+    pinMode(ep, INPUT);
+    _trigPin = tp;
+    _echoPin = ep;
+    cmDivisor = 27.6233;
+    inDivisor = 70.1633;   
+}
 
 double With_Filter::filter(double alpha, double(*timing)) {
     // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off

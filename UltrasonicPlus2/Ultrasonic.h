@@ -39,7 +39,7 @@ class Ultrasonic {
 public:
     Ultrasonic(int tp, int ep);
     long timing();
-    float convert(long (*timing), int metric); /*{
+    float convert(()long (*timing()), int metric); /*{
     // microsec / 29 / 2;
     if(metric) return microsec / _cmDivisor / 2.0;  // CM
     // microsec / 74 / 2;
