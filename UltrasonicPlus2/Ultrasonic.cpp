@@ -34,10 +34,14 @@
  */
 
 #include <stdlib.h>
-#include <string.h>
-#include <math.h>
 #include "Ultrasonic.h"
-#include"With_Filter.h"
+#include "With_Filter.h"
+
+#if defined(ARDUINO) && ARDUINO >= 100
+#include "Arduino.h"
+#else
+#include "WProgram.h"
+#endif
 
 Ultrasonic::Ultrasonic(int tp, int ep) // This class define the pins and the constants to convert the units
 {
@@ -55,9 +59,7 @@ long Ultrasonic::timing() {
     digitalWrite(_trigPin, HIGH);
     delayMicroseconds(10);
     digitalWrite(_trigPin, LOW);
-    double a = pulseIn(_echoPin, HIGH, 4350); // Standard function on Arduino (pulseIn(pin, value, timeout), where timeout is the time used to stop the reading. The chosen value is equivalent to the time that a sound takes to go through 150 cm  )
-    return a;
-
+    return pulseIn(_echoPin, HIGH, 4350); // Standard function on Arduino (pulseIn(pin, value, timeout), where timeout is the time used to stop the reading. The chosen value is equivalent to the time that a sound takes to go through 150 cm  )
 }
 
 float Ultrasonic::convert(long (*timing), int metric) {
@@ -184,43 +186,43 @@ void Ultrasonic::_freeBuffers() {
 //};
 
 double With_Filter::filter(double alpha, double(*timing)) {
-   // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off
+    // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off
     // Y[n] = a * X[n] + (1-a) * Y[N-1]
-    long previous_reading =(*timing)();
+    long previous_reading = (*timing);
     double result_function;
     long y;
-    for (int i=0;i>=0;i++) {
-        if (i=0){
-            y= (*timing);
+    for (int i = 0; i >= 0; i++) {
+        if (i = 0) {
+            y = (*timing);
             previous_reading = result_function;
             return result_function;
-        } 
+        }
         else {
-            y = (alpha*(*timing)()) + ((1- alpha)* previous_reading);
+            y = (alpha * (*timing)) + ((1 - alpha) * previous_reading);
             previous_reading = result_function;
             return result_function;
         }
     }
 }
 
-double With_Filter :: after_filter_cm(double alpha,double(*timing),double(*filter)(double, double)) {
+double With_Filter::after_filter_cm(double alpha, double(*timing), double(*filter)(double, double)) {
     // turn the result after the aplication of the filter into cm
     double cm;
-    cm = (*filter)(alpha, (*timing)()) /cmDivisor;
+    cm = (*filter)(alpha, (*timing)) / cmDivisor;
     return cm;
 
 };
 
-double With_Filter :: after_filter_in(double alpha,double(*timing),double(*filter)(double, double)) {
+double With_Filter::after_filter_in(double alpha, double(*timing), double(*filter)(double, double)) {
     // turn the result after filter into inches
     double in;
-    in = (*filter)(alpha,(*timing)()) /inDivisor;
+    in = (*filter)(alpha, (*timing)) / inDivisor;
     return in;
 };
 
-bool With_Filter :: digital_result(double alpha,double(*timing),double(*filter)(double, double)) {
-           
-    if (((*filter)(alpha,(*timing)())) >= 4350) return false;
+bool With_Filter::digital_result(double alpha, double(*timing), double(*filter)(double, double)) {
+
+    if ((*filter)(alpha, (*timing)) >= 4350) return false;
     else return true; // if the enemy is not in the range, return false
 };
 

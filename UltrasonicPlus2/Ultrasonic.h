@@ -20,16 +20,13 @@
 #ifndef ULTRASONIC_H
 #define ULTRASONIC_H
 
-#include <stddef.h>
-
 #if defined(ARDUINO) && ARDUINO >= 100
-    #include <Arduino.h>
-#else
-    #include <WProgram.h>
-#endif
-
+ #include "Arduino.h"
+ #else
+ #include "WProgram.h"
+ #endif
 // Undefine COMPILE_STD_DEV if you don't want Standard Deviation.
-#define COMPILE_STD_DEV
+//#define COMPILE_STD_DEV
 
 typedef struct bufferCtl {
     float *pBegin;
