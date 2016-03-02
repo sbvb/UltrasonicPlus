@@ -26,10 +26,10 @@ public:
     double inDivisor = 70.1633;
     double _alpha; 
     With_Filter(int tp, int ep);
-    double filter(double alpha,double(*timing));
-    double after_filter_cm(double alpha,double(*timing),double(*filter)(double, double));
-    double after_filter_in(double alpha,double(*timing),double(*filter)(double, double));
-    bool digital_result(double alpha,double(*timing),double(*filter)(double, double));
+    double filter(double alpha,long(*timing));
+    double after_filter_cm(double alpha,long(*timing),double(*filter)(double, long));
+    double after_filter_in(double alpha,long(*timing),double(*filter)(double, long));
+    bool digital_result(double alpha,long(*timing),double(*filter)(double, long));
 };
 
 

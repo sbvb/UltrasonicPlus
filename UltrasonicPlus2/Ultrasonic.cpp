@@ -37,25 +37,27 @@
 #include "Ultrasonic.h"
 #include "With_Filter.h"
 
-#if defined(ARDUINO) && ARDUINO >= 100
+/*#if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
 #else
 #include "WProgram.h"
 #endif
+ */
+//#include "Arduino.h"
 
 Ultrasonic::Ultrasonic(int tp, int ep) // This class define the pins and the constants to convert the units
 {
     pinMode(tp, OUTPUT);
     pinMode(ep, INPUT);
-    _trigPin = tp;
-    _echoPin = ep;
+    this->_trigPin = tp;
+    this->_echoPin = ep;
     _cmDivisor = 27.6233;
     _inDivisor = 70.1633;
 }
 
 long Ultrasonic::timing() {
     digitalWrite(_trigPin, LOW);
-    delayMicroseconds(2);
+    delayMicroseconds(5);
     digitalWrite(_trigPin, HIGH);
     delayMicroseconds(10);
     digitalWrite(_trigPin, LOW);
@@ -191,7 +193,7 @@ With_Filter::With_Filter(int tp, int ep) : Ultrasonic(tp, ep){
     inDivisor = 70.1633;   
 }
 
-double With_Filter::filter(double alpha, double(*timing)) {
+double With_Filter::filter(double alpha, long(*timing)) {
     // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off
     // Y[n] = a * X[n] + (1-a) * Y[N-1]
     long previous_reading = (*timing);
@@ -211,7 +213,7 @@ double With_Filter::filter(double alpha, double(*timing)) {
     }
 }
 
-double With_Filter::after_filter_cm(double alpha, double(*timing), double(*filter)(double, double)) {
+double With_Filter::after_filter_cm(double alpha, long(*timing), double(*filter)(double, long)) {
     // turn the result after the aplication of the filter into cm
     double cm;
     cm = (*filter)(alpha, (*timing)) / cmDivisor;
@@ -219,14 +221,14 @@ double With_Filter::after_filter_cm(double alpha, double(*timing), double(*filte
 
 };
 
-double With_Filter::after_filter_in(double alpha, double(*timing), double(*filter)(double, double)) {
+double With_Filter::after_filter_in(double alpha, long(*timing), double(*filter)(double, long)) {
     // turn the result after filter into inches
     double in;
     in = (*filter)(alpha, (*timing)) / inDivisor;
     return in;
 };
 
-bool With_Filter::digital_result(double alpha, double(*timing), double(*filter)(double, double)) {
+bool With_Filter::digital_result(double alpha, long(*timing), double(*filter)(double, long)) {
 
     if ((*filter)(alpha, (*timing)) >= 4350) return false;
     else return true; // if the enemy is not in the range, return false

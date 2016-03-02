@@ -23,7 +23,8 @@
 #if defined(ARDUINO) && ARDUINO >= 100
  #include "Arduino.h"
  #else
- #include "WProgram.h"
+ //#include "WProgram.h"
+//#include "Arduino.h"
  #endif
 // Undefine COMPILE_STD_DEV if you don't want Standard Deviation.
 //#define COMPILE_STD_DEV
@@ -39,7 +40,7 @@ class Ultrasonic {
 public:
     Ultrasonic(int tp, int ep);
     long timing();
-    float convert(()long (*timing()), int metric); /*{
+    float convert(long (*timing), int metric); /*{
     // microsec / 29 / 2;
     if(metric) return microsec / _cmDivisor / 2.0;  // CM
     // microsec / 74 / 2;
