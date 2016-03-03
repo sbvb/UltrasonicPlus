@@ -62,7 +62,7 @@ long Ultrasonic::timing() {
     delayMicroseconds(10);
     digitalWrite(_trigPin, LOW);
     double timing1 = pulseIn(_echoPin, HIGH); // Standard function on Arduino (pulseIn(pin, value, timeout), where timeout is the time used to stop the reading. The chosen value is equivalent to the time that a sound takes to go through 150 cm  )
-    timing1=_timing1;
+    _timing1 = timing1;
     return timing1;
 }
 
@@ -200,19 +200,19 @@ double With_Filter::filter(double alpha) {
     // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off
     // Y[n] = a * X[n] + (1-a) * Y[N-1]
     long previous_reading = _timing1;
-    double result_function;
+   _result_function;
     long y;
     for (int i = 0; i >= 0; i++) {
         if (i = 0) {
-            y =_timing1;
-            previous_reading = result_function;
-            //Serial.print("1x");
-            return result_function;
+            y = previous_reading;
+            _result_function = previous_reading;
+            return _result_function;
         }
         else {
-            previous_reading = result_function;
-            y = (alpha * _timing1) + ((1 - alpha) * previous_reading);
-            return result_function;
+            previous_reading = _result_function;
+            y = (alpha *(_timing1) ) + ((1 - alpha) * previous_reading);
+            _result_function = y;
+            return _result_function;
         }
     }
 }

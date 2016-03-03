@@ -26,9 +26,9 @@ private:
     double cmDivisor = 27.6233;
     double inDivisor = 70.1633;
     double _alpha;
-    double result_function;
+    
 public:
-   
+    long _result_function;   
     With_Filter(int tp, int ep);
     double filter(double alpha);
     double after_filter_cm();

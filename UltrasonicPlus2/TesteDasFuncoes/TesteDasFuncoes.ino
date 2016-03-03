@@ -13,6 +13,7 @@ void loop() {
   
  example.timing();
  example.convert(1);
+ 
  example1.filter(0.7);
  example1.digital_result();
  example1.after_filter_cm();
@@ -22,13 +23,15 @@ void loop() {
  Serial.print("time : ");
  Serial.print(example.timing());
  Serial.print(",");
- Serial.print("Filter : ");
+ Serial.print("Converter");
+ Serial.print(example.convert(1));  
+ Serial.print(" Filter : ");
  Serial.print(example1.filter(0.7));
  Serial.print(",  ");
  Serial.print("Resultado convertido : ");
- Serial.print(example1.after_filter_cm());
- Serial.print(",");
- Serial.println(a);
+ Serial.println(example1.after_filter_cm());
+
+
  delay(500);
 
 }
