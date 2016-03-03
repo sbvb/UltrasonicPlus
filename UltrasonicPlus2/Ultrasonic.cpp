@@ -43,7 +43,7 @@
 #include "WProgram.h"
 #endif
  */
-#include "Arduino.h"
+//#include "Arduino.h"
 
 Ultrasonic::Ultrasonic(int tp, int ep) // This class define the pins and the constants to convert the units
 {
@@ -61,12 +61,14 @@ long Ultrasonic::timing() {
     digitalWrite(_trigPin, HIGH);
     delayMicroseconds(10);
     digitalWrite(_trigPin, LOW);
-    return pulseIn(_echoPin, HIGH, 4350); // Standard function on Arduino (pulseIn(pin, value, timeout), where timeout is the time used to stop the reading. The chosen value is equivalent to the time that a sound takes to go through 150 cm  )
+    double timing1 = pulseIn(_echoPin, HIGH); // Standard function on Arduino (pulseIn(pin, value, timeout), where timeout is the time used to stop the reading. The chosen value is equivalent to the time that a sound takes to go through 150 cm  )
+    return timing1;
 }
 
-float Ultrasonic::convert(long (*timing), int metric) {
+
+float Ultrasonic::convert( int metric) {
     // microsec / 29 / 2;
-    long microsec = (*timing);
+    long microsec = timing();
     if (metric) {
         double cm;
         cm = microsec / _cmDivisor / 2.0; // CM
@@ -193,21 +195,22 @@ With_Filter::With_Filter(int tp, int ep) : Ultrasonic(tp, ep){
     inDivisor = 70.1633;   
 }
 
-double With_Filter::filter(double alpha, long(*timing)) {
+double With_Filter::filter(double alpha) {
     // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off
     // Y[n] = a * X[n] + (1-a) * Y[N-1]
-    long previous_reading = (*timing);
+    long previous_reading = timing();
     double result_function;
     long y;
     for (int i = 0; i >= 0; i++) {
         if (i = 0) {
-            y = (*timing);
+            y =timing();
             previous_reading = result_function;
+            Serial.print("1x");
             return result_function;
         }
         else {
-            y = (alpha * (*timing)) + ((1 - alpha) * previous_reading);
             previous_reading = result_function;
+            y = (alpha * timing()) + ((1 - alpha) * previous_reading);
             return result_function;
         }
     }

@@ -20,6 +20,7 @@
 
 class With_Filter : public Ultrasonic {
 private:
+
     int _trigPin;
     int _echoPin;
     double cmDivisor = 27.6233;
@@ -29,7 +30,7 @@ private:
 public:
 
     With_Filter(int tp, int ep);
-    double filter(double alpha, long(*timing));
+    double filter(double alpha);
     double after_filter_cm();
     double after_filter_in();
     bool digital_result();

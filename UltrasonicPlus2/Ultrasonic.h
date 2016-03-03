@@ -38,9 +38,10 @@ typedef struct bufferCtl {
 
 class Ultrasonic {
 public:
+    long timing1;
     Ultrasonic(int tp, int ep);
     long timing();
-    float convert(long (*timing), int metric); /*{
+    float convert(int metric); /*{
     // microsec / 29 / 2;
     if(metric) return microsec / _cmDivisor / 2.0;  // CM
     // microsec / 74 / 2;
@@ -61,6 +62,8 @@ private:
     int _echoPin;
     float _cmDivisor;
     float _inDivisor;
+   
+    
 
 #ifdef COMPILE_STD_DEV
     size_t _numBufs;
