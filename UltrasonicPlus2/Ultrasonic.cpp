@@ -198,19 +198,19 @@ With_Filter::With_Filter(int tp, int ep) : Ultrasonic(tp, ep){
 double With_Filter::filter(double alpha) {
     // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off
     // Y[n] = a * X[n] + (1-a) * Y[N-1]
-    long previous_reading = timing();
+    long previous_reading = timing1;
     double result_function;
     long y;
     for (int i = 0; i >= 0; i++) {
         if (i = 0) {
-            y =timing();
+            y =timing1;
             previous_reading = result_function;
-            Serial.print("1x");
+            //Serial.print("1x");
             return result_function;
         }
         else {
             previous_reading = result_function;
-            y = (alpha * timing()) + ((1 - alpha) * previous_reading);
+            y = (alpha * timing1) + ((1 - alpha) * previous_reading);
             return result_function;
         }
     }

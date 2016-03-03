@@ -28,7 +28,7 @@ private:
     double _alpha;
     double result_function;
 public:
-
+   
     With_Filter(int tp, int ep);
     double filter(double alpha);
     double after_filter_cm();

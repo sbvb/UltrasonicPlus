@@ -11,7 +11,7 @@ void loop() {
   
  long a = pulseIn(13, HIGH);
   
- long timing = example.timing();
+ example.timing();
  example.convert(1);
  example1.filter(0.7);
  example1.digital_result();
@@ -25,6 +25,9 @@ void loop() {
  Serial.print("Filter : ");
  Serial.print(example1.filter(0.7));
  Serial.print(",  ");
+ Serial.print("Resultado convertido : ");
+ Serial.print(example1.after_filter_cm());
+ Serial.print(",");
  Serial.println(a);
  delay(500);
 
