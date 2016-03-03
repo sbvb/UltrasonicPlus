@@ -38,7 +38,7 @@ typedef struct bufferCtl {
 
 class Ultrasonic {
 public:
-    long timing1;
+    long _timing1;
     Ultrasonic(int tp, int ep);
     long timing();
     float convert(int metric); /*{
