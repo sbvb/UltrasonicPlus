@@ -33,6 +33,12 @@
  * 108.25      72.9473
  */
 
+
+// comment line below to compile for actual arduino
+// leave line below to use simulated arduino
+#define ARDUINO_SIMULATION
+
+
 #include <stdlib.h>
 #include "Ultrasonic.h"
 #include "With_Filter.h"
@@ -47,8 +53,11 @@
 
 Ultrasonic::Ultrasonic(int tp, int ep) // This class define the pins and the constants to convert the units
 {
+#ifndef ARDUINO_SIMULATION    
     pinMode(tp, OUTPUT);
     pinMode(ep, INPUT);
+#endif
+    
     _trigPin = tp;
     _echoPin = ep;
     _cmDivisor = 27.6233;
@@ -56,13 +65,18 @@ Ultrasonic::Ultrasonic(int tp, int ep) // This class define the pins and the con
 }
 
 long Ultrasonic::timing() {
+#ifndef ARDUINO_SIMULATION    
     digitalWrite(_trigPin, LOW);
     delayMicroseconds(5);
     digitalWrite(_trigPin, HIGH);
     delayMicroseconds(10);
     digitalWrite(_trigPin, LOW);
     double timing1 = pulseIn(_echoPin, HIGH); // Standard function on Arduino (pulseIn(pin, value, timeout), where timeout is the time used to stop the reading. The chosen value is equivalent to the time that a sound takes to go through 150 cm  )
-    _timing1 = timing1;
+#else
+    double timing1 = 2.2;
+#endif
+    
+    _timing1=timing1;
     return timing1;
 }
 
@@ -188,8 +202,10 @@ void Ultrasonic::_freeBuffers() {
 #endif // COMPILE_STD_DEV
 
 With_Filter::With_Filter(int tp, int ep) : Ultrasonic(tp, ep){
+#ifndef ARDUINO_SIMULATION    
     pinMode(tp, OUTPUT);
     pinMode(ep, INPUT);
+#endif
     _trigPin = tp;
     _echoPin = ep;
     cmDivisor = 27.6233;
@@ -200,19 +216,19 @@ double With_Filter::filter(double alpha) {
     // turn the result more reliable, depending on the alpha value to be set. If alpha = 1, the filter is off
     // Y[n] = a * X[n] + (1-a) * Y[N-1]
     long previous_reading = _timing1;
-   _result_function;
+    double result_function;
     long y;
     for (int i = 0; i >= 0; i++) {
         if (i = 0) {
-            y = previous_reading;
-            _result_function = previous_reading;
-            return _result_function;
+            y =_timing1;
+            previous_reading = result_function;
+            //Serial.print("1x");
+            return result_function;
         }
         else {
-            previous_reading = _result_function;
-            y = (alpha *(_timing1) ) + ((1 - alpha) * previous_reading);
-            _result_function = y;
-            return _result_function;
+            previous_reading = result_function;
+            y = (alpha * _timing1) + ((1 - alpha) * previous_reading);
+            return result_function;
         }
     }
 }
@@ -279,5 +295,11 @@ With_Filter::after_filter_in(float(*convert)(double(*filter)(double alpha, long 
 };
  * */
 
+#include <iostream>
+using namespace std;
 
-
+int main() {
+    cout << "====== Arduino simulator" << endl;
+    
+    return 0;
+}
