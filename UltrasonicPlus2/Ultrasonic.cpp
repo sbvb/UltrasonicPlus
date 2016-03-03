@@ -43,14 +43,14 @@
 #include "WProgram.h"
 #endif
  */
-//#include "Arduino.h"
+#include "Arduino.h"
 
 Ultrasonic::Ultrasonic(int tp, int ep) // This class define the pins and the constants to convert the units
 {
     pinMode(tp, OUTPUT);
     pinMode(ep, INPUT);
-    this->_trigPin = tp;
-    this->_echoPin = ep;
+    _trigPin = tp;
+    _echoPin = ep;
     _cmDivisor = 27.6233;
     _inDivisor = 70.1633;
 }
@@ -213,24 +213,24 @@ double With_Filter::filter(double alpha, long(*timing)) {
     }
 }
 
-double With_Filter::after_filter_cm(double alpha, long(*timing), double(*filter)(double, long)) {
+double With_Filter::after_filter_cm() {
     // turn the result after the aplication of the filter into cm
     double cm;
-    cm = (*filter)(alpha, (*timing)) / cmDivisor;
+    cm = result_function/ cmDivisor;
     return cm;
 
 };
 
-double With_Filter::after_filter_in(double alpha, long(*timing), double(*filter)(double, long)) {
+double With_Filter::after_filter_in() {
     // turn the result after filter into inches
     double in;
-    in = (*filter)(alpha, (*timing)) / inDivisor;
+    in = result_function / inDivisor;
     return in;
 };
 
-bool With_Filter::digital_result(double alpha, long(*timing), double(*filter)(double, long)) {
+bool With_Filter::digital_result() {
 
-    if ((*filter)(alpha, (*timing)) >= 4350) return false;
+    if (result_function >= 4350) return false;
     else return true; // if the enemy is not in the range, return false
 };
 
